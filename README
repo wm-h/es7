@@ -1,0 +1,21 @@
+es说明
+1、es版本  7.9.1
+2、官方文档  https://www.elastic.co/guide/en/elasticsearch/reference/7.9/elasticsearch-intro.html
+3、字段类型说明  https://www.elastic.co/guide/en/elasticsearch/reference/7.9/mapping-types.html
+
+es安装：参考官方文档
+1、拉取docker镜像  docker pull docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+2、下载安装ik分词器  注意与es版本一致
+     下载与说明  https://github.com/medcl/elasticsearch-analysis-ik/releases/tag/v7.9.1
+     解压到  unzip elasticsearch-analysis-ik-7.9.1.zip /usr/share/elasticsearch/v_7.9.1/plugins/ik
+3、docker run 容器
+     docker run -di --name=es01 -p 9200:9200 -p 9300:9300 -v /usr/share/elasticsearch/v_7.9.1/plugins/:/usr/share/elasticsearch/plugins -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+
+包依赖
+pip3 install elasticsearch7  文档https://pypi.org/search/?q=elasticsearch&o=
+
+
+目的
+1、学习es的增删改查
+2、学习elasticsearch7包的使用
+3、记录官方文档没有特别说明的坑

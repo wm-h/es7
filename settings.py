@@ -1,0 +1,3 @@
+INDICES = [
+    "indices.CONTENT"
+]

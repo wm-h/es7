@@ -127,8 +127,9 @@ class CONTENT(IndexBase):
     title = Field(name="title", default="",
                   fields={"standard": Field(name="standard", analyzer="standard", search_analyzer="standard")})
     author = Field(name="author", default="")
+    tag = Field(name="tag", default="")
 
 
 def init_data():
-    for i in range(100, 200):
-        CONTENT.create_doc(id=i, title=f"内容-标题{i}", author=f"作者{i}")
+    for i in range(200, 300):
+        CONTENT.create_doc(id=i, title=f"内容-标题{i}", author=f"作者{i}", tag="tag tag content")

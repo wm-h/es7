@@ -9,7 +9,8 @@ class Field:
             field_type="text",
             analyzer="my_ik_max_word",
             search_analyzer="my_ik_smart",
-            fields=None
+            fields=None,
+            **kwargs,
     ):
         self.name = name
         self.default = default
@@ -17,6 +18,7 @@ class Field:
         self.analyzer = analyzer
         self.search_analyzer = search_analyzer
         self.fields = fields
+        self.kwargs = kwargs
 
     def get_map(self):
         m = {
@@ -26,6 +28,10 @@ class Field:
         if self.type == "text":
             m["analyzer"] = self.analyzer
             m["search_analyzer"] = self.search_analyzer
+
+        if self.kwargs is not None:
+            for k, v in self.kwargs.items():
+                m[k] = v
 
         if self.fields is not None and type(self.fields) == dict:
             m["fields"] = {}
@@ -118,6 +124,10 @@ class IndexBase:
     def query_data_by_id(cls, id):
         return es.conn.get(index=cls.get_index_name(), id=id)
 
+    @classmethod
+    def update_by_query(cls, body):
+        return es.conn.update_by_query(index=cls.get_index_name(), body=body)
+
 
 # 定义一个index类后，需要在settings.INDICES中添加类的路径，才能启用
 
@@ -127,9 +137,13 @@ class CONTENT(IndexBase):
     title = Field(name="title", default="",
                   fields={"standard": Field(name="standard", analyzer="standard", search_analyzer="standard")})
     author = Field(name="author", default="")
-    tag = Field(name="tag", default="")
+    tag = Field(name="tag", default="", fields={
+        "keyword": Field(name="keyword", field_type="keyword")
+    })
+    tap = Field(name="tap", default=0, field_type="keyword")
 
 
 def init_data():
-    for i in range(200, 300):
-        CONTENT.create_doc(id=i, title=f"内容-标题{i}", author=f"作者{i}", tag="tag tag content")
+    for i in range(300, 400):
+        CONTENT.create_doc(id=i, title=f"内容-标题{i}", author=f"作者{i}", tag="tag tag content", tap=i)
+
